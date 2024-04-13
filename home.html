@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Library</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .search-link {
+            text-align: right;
+            padding: 1rem;
+            background: #f4f4f4;
+        }
+
+        .search-link a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .search-link a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            padding: 1rem;
+        }
+
+        .book-list {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .book {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            width: 80%; /* Adjust width as needed */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .book strong {
+            color: #333;
+        }
+
+        .book p {
+            margin: 5px 0;
+            color: #666;
+        }
+    </style>
+    <script src="home.js?v=6" defer></script>
+</head>
+<body>
+    <div class="search-link">
+        <!-- Link to search page -->
+        <a href="search.html">Search Books</a>
+        <!-- Admin button placeholder -->
+        <button id="adminButton" style="display: none;">Admin Panel</button>
+    </div>
+    <main>
+        <h2>Your Library</h2>
+        <!-- Placeholder for user's books -->
+        <div id="bookList" class="book-list"></div>
+    </main>
+</body>
+</html>

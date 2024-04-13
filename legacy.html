@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Library Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        input, button {
+            margin: 10px 0;
+            padding: 8px;
+        }
+
+        #bookList, #apiSearchResults {
+            margin-top: 20px;
+        }
+
+        .book, .apiBook {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+
+        .removeBtn {
+            color: red;
+            cursor: pointer;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <!-- Library Page -->
+    <div id="libraryPage">
+        <h1>Home Library Portal</h1>
+		<button onclick="exportLibraryData()">Export Library</button>
+		<input type="file" id="fileInput" style="display: none;" onchange="importLibraryData(event)"/>
+		<button onclick="document.getElementById('fileInput').click();">Import Library</button>
+        <button onclick="showSearchPage()">Search Books</button>
+        <div id="bookForm">
+            <input type="text" id="title" placeholder="Title">
+            <input type="text" id="author" placeholder="Author">
+            <input type="text" id="publisher" placeholder="Publisher">
+            <input type="number" id="yearPublished" placeholder="Year Published">
+            <input type="text" id="category" placeholder="Category">
+            <input type="text" id="isbn" placeholder="ISBN">
+            <button onclick="addBook()">Add Book</button>
+        </div>
+        <div id="bookList">
+            <!-- Book list will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Search Page -->
+    <div id="searchPage" style="display:none;">
+        <h1>Search Google Books</h1>
+        <input type="text" id="apiSearchField" placeholder="Search Google Books...">
+        <button onclick="searchGoogleBooks()">Search</button>
+        <div id="apiSearchResults"></div>
+        <button onclick="loadMoreBooks()">Load More</button>
+        <button onclick="showLibrary()">Home</button>
+    </div>
+
+    <script>
+	
+		function exportLibraryData() {
+			const dataStr = JSON.stringify(books);
+			const blob = new Blob([dataStr], { type: 'application/json' });
+			const url = URL.createObjectURL(blob);
+
+			const link = document.createElement('a');
+			link.href = url;
+			link.download = 'libraryData.json';
+			document.body.appendChild(link); 
+			link.click();
+			document.body.removeChild(link); 
+		}
+		
+		function importLibraryData(event) {
+			const file = event.target.files[0];
+			if (!file) {
+				return;
+			}
+
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				const content = e.target.result;
+				try {
+					const importedBooks = JSON.parse(content);
+					if (Array.isArray(importedBooks)) {
+						
+						books = books.concat(importedBooks.filter(book => isValidBook(book)));
+						saveBooksToLocal();
+						displayBooks();
+					} else {
+						alert('Invalid file format');
+					}
+				} catch (error) {
+					console.error('Error reading file:', error);
+					alert('An error occurred while reading the file');
+				}
+			};
+			reader.readAsText(file);
+		}
+		
+		function isValidBook(book) {
+			
+			return book 
+				&& typeof book.title === 'string' && book.title.trim() !== ''
+				&& typeof book.author === 'string' && book.author.trim() !== ''
+				&& (!book.publisher || typeof book.publisher === 'string')  
+				&& (!book.yearPublished || typeof book.yearPublished === 'string') 
+				&& (!book.category || typeof book.category === 'string')  
+				&& (!book.isbn || typeof book.isbn === 'string');
+		
+        let books = loadBooksFromLocal() || [];
+
+        function addBookFromApi(book) {
+			books.push(book);
+			saveBooksToLocal();
+			alert('Book added to your library!');
+			showLibrary();  
+			displayBooks(); 
+		}
+
+        let currentSearch = '';
+		let startIndex = 0;
+
+		function searchGoogleBooks() {
+			currentSearch = document.getElementById('apiSearchField').value;
+			fetchBooks(currentSearch);
+		}
+
+		function fetchBooks(query, startIndex = 0) {
+			const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&startIndex=${startIndex}`;
+			fetch(apiUrl)
+				.then(response => response.json())
+				.then(data => displayApiSearchResults(data.items))
+				.catch(error => console.error('Error fetching data:', error));
+		}
+
+		function loadMoreBooks() {
+			startIndex += 10; 
+			fetchBooks(currentSearch, startIndex);
+		}
+
+        function displayApiSearchResults(items) {
+			const resultsDiv = document.getElementById('apiSearchResults');
+			resultsDiv.innerHTML = '';
+
+			items.forEach((item, index) => {
+				const bookInfo = item.volumeInfo;
+				const book = {
+					title: bookInfo.title || 'No title available',
+					author: bookInfo.authors ? bookInfo.authors.join(', ') : 'No author available',
+					publisher: bookInfo.publisher || 'No publisher available',
+					yearPublished: bookInfo.publishedDate ? bookInfo.publishedDate.substring(0, 4) : 'No year available',
+					category: bookInfo.categories ? bookInfo.categories[0] : 'No category available',
+					isbn: bookInfo.industryIdentifiers ? bookInfo.industryIdentifiers[0].identifier : 'No ISBN available'
+				};
+
+				const bookElement = document.createElement('div');
+				bookElement.className = 'apiBook';
+				bookElement.innerHTML = `
+					<strong>Title:</strong> ${book.title}<br>
+					<strong>Author:</strong> ${book.author}<br>
+					<strong>Publisher:</strong> ${book.publisher}<br>
+					<strong>Year Published:</strong> ${book.yearPublished}<br>
+					<strong>Category:</strong> ${book.category}<br>
+					<strong>ISBN:</strong> ${book.isbn}
+				`;
+
+				const addButton = document.createElement('button');
+				addButton.textContent = 'Add';
+				addButton.addEventListener('click', () => addBookFromApi(book));
+				bookElement.appendChild(addButton);
+
+				resultsDiv.appendChild(bookElement);
+			});
+		}
+		
+
+        function addBook() {
+            const title = document.getElementById('title').value;
+            const author = document.getElementById('author').value;
+            const publisher = document.getElementById('publisher').value;
+            const yearPublished = document.getElementById('yearPublished').value;
+            const category = document.getElementById('category').value;
+            const isbn = document.getElementById('isbn').value;
+
+            const book = { title, author, publisher, yearPublished, category, isbn };
+            books.push(book);
+            saveBooksToLocal();
+            console.log('Checking saved data:', localStorage.getItem('books'));
+            displayBooks();
+            clearForm();
+        }
+
+         function displayBooks(filter = '') {
+    const bookList = document.getElementById('bookList');
+    bookList.innerHTML = ''; 
+
+    books.filter(book => {
+        
+        const searchTerm = filter.toLowerCase();
+        return book.title.toLowerCase().includes(searchTerm) ||
+               book.author.toLowerCase().includes(searchTerm) ||
+               book.publisher.toLowerCase().includes(searchTerm) ||
+               book.yearPublished.toString().includes(searchTerm) ||
+               book.category.toLowerCase().includes(searchTerm) ||
+               book.isbn.includes(searchTerm);
+    }).forEach((book, index) => {
+        const bookElement = document.createElement('div');
+        bookElement.className = 'book';
+        bookElement.innerHTML = `
+            <strong>Title:</strong> ${book.title}<br>
+            <strong>Author:</strong> ${book.author}<br>
+            <strong>Publisher:</strong> ${book.publisher}<br>
+            <strong>Year Published:</strong> ${book.yearPublished}<br>
+            <strong>Category:</strong> ${book.category}<br>
+            <strong>ISBN:</strong> ${book.isbn}
+            <span class="removeBtn" onclick="removeBook(${index})">X</span>
+        `;
+        bookList.appendChild(bookElement);
+    });
+}
+		function resetDisplay() {
+			document.getElementById('searchField').value = ''; 
+			displayBooks(); 
+		}
+		
+        function clearForm() {
+            document.getElementById('title').value = '';
+            document.getElementById('author').value = '';
+            document.getElementById('publisher').value = '';
+            document.getElementById('yearPublished').value = '';
+            document.getElementById('category').value = '';
+            document.getElementById('isbn').value = '';
+        }
+
+        function removeBook(index) {
+            books.splice(index, 1);
+            saveBooksToLocal();
+            displayBooks();
+        }
+
+        function searchBooks() {
+            const searchTerm = document.getElementById('searchField').value;
+            displayBooks(searchTerm);
+        }
+
+        function saveBooksToLocal() {
+			console.log('Saving books:', books); 
+            localStorage.setItem('books', JSON.stringify(books));
+        }
+
+        function loadBooksFromLocal() {
+            const storedBooks = localStorage.getItem('books');
+            return storedBooks ? JSON.parse(storedBooks) : [];
+        }
+		
+		function showLibrary() {
+			document.getElementById('libraryPage').style.display = 'block';
+			document.getElementById('searchPage').style.display = 'none';
+		}
+
+		function showSearchPage() {
+			document.getElementById('libraryPage').style.display = 'none';
+			document.getElementById('searchPage').style.display = 'block';
+		}
+
+        
+        window.onload = function() {
+            displayBooks();
+        };
+    </script>
+</body>
+</html>
