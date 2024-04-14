@@ -63,7 +63,7 @@ function displayResults(books, resultsDivId) {
                 <strong>Publisher:</strong> ${book.publisher || 'No publisher available'}<br>
                 <strong>Year Published:</strong> ${book.year_published || 'No year available'}<br>
                 <strong>Category:</strong> ${book.category || 'No category available'}<br>
-                <strong>ISBN:</strong> ${book.isbn || 'No ISBN available'}
+                <strong>ISBN:</strong> ${book.isbn || 'No ISBN available'}<br>
             </div>
         `;
 

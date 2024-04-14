@@ -1,18 +1,108 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <title>Admin Page</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+        body {
+            font-family: Merriweather, "serif";
+            background: rgb(4,32,43);
+            background: linear-gradient(0deg, rgba(4,32,43,1) 0%, rgba(22,54,68,1) 100%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        nav {
+            background-color: #96ABB6;
+            border: solid #576B75;
+            padding-left: 10px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        nav button {
+            font-family: Merriweather, "serif";
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #4BE05E;
+            border: solid 2px #009817;
+            margin-left: 10px;
+            padding: 7px;
+        }
+        h1 {
+            color: white;
+        }
+        #bookForm {
+            color: #031E29;
+            background-color: #96ABB6;
+            border: solid #576B75;
+            margin: 25px auto 25px auto;
+            padding: 10px;
+            width: 500px;
+            height: auto;
+            text-align: center;
+        }
+        #bookForm label {
+            font-weight: bold;
+            display: inline-block;
+            width: 75px;
+            margin-left: 20px;
+            padding-right: 20px;
+        }
+        #bookForm input {
+            font-family: Merriweather, "serif";
+            position: relative;
+            display: inline-block;
+            width: 300px;
+            border: solid 2px #576B75;
+            padding-top: 5px;
+            padding-bottom: 5px;
+            margin: 5px;
+        }
+        /* Submit Button Styling */
+        #submit {
+            font-family: Merriweather, "serif";
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #4BE05E;
+            border: solid 2px #009817;
+            width: 450px;
+            height: auto;
+            margin: auto;
+            padding: 5px;
+        }
+        #submit:hover {
+            background-color: #93FF92;
+        }
+    </style>
 </head>
 <body>
-    <h1>Admin Portal</h1>
+    <nav>
+        <a href="home.html"> <img src="img/logo-256x256.png" width="64px" /> </a>
+        <a href="search.html"> <button>Search Books</button> </a>
+        <button id="adminButton" style="display: none;">Admin Panel</button>
+    </nav>
+    <!-- <h1>Admin Portal</h1> -->
     <div id="bookForm">
+        <img src="img/logo-256x256.png" width="128px"><br>
         <input type="text" id="title" placeholder="Title">
         <input type="text" id="author" placeholder="Author">
         <input type="text" id="publisher" placeholder="Publisher">
         <input type="number" id="yearPublished" placeholder="Year Published">
         <input type="text" id="category" placeholder="Category">
         <input type="text" id="isbn" placeholder="ISBN">
-        <button onclick="addBook()">Add Book</button>
+        <button onclick="addBook()" id="submit">Add Book</button>
     </div>
     <script src="admin.js?v=3"></script>
 </body>

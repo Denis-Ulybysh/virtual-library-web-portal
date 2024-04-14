@@ -3,74 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
     <title>Your Library</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            line-height: 1.6;
+        html, body {
+            height: 100%;
             margin: 0;
-            padding: 0;
+            overflow: hidden;
+        }
+        body {
+            font-family: Merriweather, "serif";
+            background: rgb(4,32,43);
+            background: linear-gradient(0deg, rgba(4,32,43,1) 0%, rgba(22,54,68,1) 100%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        h1 {
+            color: white;
+        }
+        nav {
+            background-color: #96ABB6;
+            border: solid #576B75;
+            padding-left: 10px;
+            padding-top: 10px;
+            padding-bottom: 5px;
             display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            align-items: center;
         }
-
-        .search-link {
-            text-align: right;
-            padding: 1rem;
-            background: #f4f4f4;
+        button {
+            font-family: Merriweather, "serif";
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background-color: #4BE05E;
+            border: solid 2px #009817;
+            margin-left: 10px;
+            padding: 7px;
         }
-
-        .search-link a {
-            color: #007bff;
-            text-decoration: none;
+        button:hover {
+            background-color: #93FF92;
         }
-
-        .search-link a:hover {
-            text-decoration: underline;
-        }
-
         main {
             flex: 1;
             padding: 1rem;
         }
-
         .book-list {
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
-
         .book {
-            border: 1px solid #ddd;
+            background-color: #96ABB6;
+            color: #031E29;
+            border: solid #576B75;
             padding: 15px;
             margin-bottom: 15px;
-            width: 80%; /* Adjust width as needed */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .book strong {
-            color: #333;
-        }
-
-        .book p {
-            margin: 5px 0;
-            color: #666;
+            width: 80%;
         }
     </style>
     <script src="home.js?v=6" defer></script>
 </head>
 <body>
-    <div class="search-link">
-        <!-- Link to search page -->
-        <a href="search.html">Search Books</a>
-        <!-- Admin button placeholder -->
-        <button id="adminButton" style="display: none;">Admin Panel</button>
-    </div>
+    <nav>
+        <a href="home.html"> <img src="img/logo-256x256.png" width="64px" /> </a>
+        <a href="search.html"> <button>Search Books</button> </a>
+        <a href="admin.html"> <button id="adminButton" style="display: none;">Admin Panel</button> </a>
+    </nav>
     <main>
-        <h2>Your Library</h2>
+        <h1>Your Library</h1>
         <!-- Placeholder for user's books -->
-        <div id="bookList" class="book-list"></div>
+        <div id="bookList" class="book-list">
+            <div class="book">
+                <strong>Title:</strong> ${book.title || 'No title available'}<br>
+                <strong>Author:</strong> ${book.author || 'No author available'}<br>
+                <strong>Publisher:</strong> ${book.publisher || 'No publisher available'}<br>
+                <strong>Year Published:</strong> ${book.year_published || 'No year available'}<br>
+                <strong>Category:</strong> ${book.category || 'No category available'}<br>
+                <strong>ISBN:</strong> ${book.isbn || 'No ISBN available'}
+            </div>
+            <div class="book">
+                <strong>Title:</strong> ${book.title || 'No title available'}<br>
+                <strong>Author:</strong> ${book.author || 'No author available'}<br>
+                <strong>Publisher:</strong> ${book.publisher || 'No publisher available'}<br>
+                <strong>Year Published:</strong> ${book.year_published || 'No year available'}<br>
+                <strong>Category:</strong> ${book.category || 'No category available'}<br>
+                <strong>ISBN:</strong> ${book.isbn || 'No ISBN available'}
+            </div>
+        </div>
     </main>
 </body>
 </html>
