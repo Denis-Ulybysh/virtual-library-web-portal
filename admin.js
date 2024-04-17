@@ -64,11 +64,74 @@ function clearForm() {
     document.getElementById('category').value = '';
     document.getElementById('isbn').value = '';
 }
+
+function loadBooks() {
+    fetch('/allBooks', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        }
+    })
+    .then(response => response.json())
+    .then(books => {
+        displayBooks(books);
+    })
+    .catch(error => console.error('Failed to load books:', error));
+}
+
+function displayBooks(books) {
+    const booksList = document.getElementById('booksList');
+    booksList.innerHTML = ''; // Clear existing entries
+
+    books.forEach(book => {
+        const bookDiv = document.createElement('div');
+        bookDiv.className = 'book';
+        bookDiv.innerHTML = `
+            <p><strong>Title:</strong> ${book.title}</p>
+            <p><strong>Author:</strong> ${book.author}</p>
+            <p><strong>Publisher:</strong> ${book.publisher}</p>
+            <p><strong>Year Published:</strong> ${book.year_published}</p>
+            <p><strong>Category:</strong> ${book.category}</p>
+            <p><strong>ISBN:</strong> ${book.isbn}</p>
+            <button onclick="deleteBook('${book.id}')">Delete</button>
+        `;
+        booksList.appendChild(bookDiv);
+    });
+}
+
+function deleteBook(bookId) {
+    // Ensure bookId is an integer
+    const bookIdInt = parseInt(bookId, 10);
+
+    fetch('/deleteBook', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('token')
+        },
+        body: JSON.stringify({ bookId: bookIdInt })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Failed to delete book');
+        alert('Book deleted successfully');
+        loadBooks(); // Reload the books to update the list
+    })
+    .catch(error => {
+        console.error('Error deleting book:', error);
+        alert('Failed to delete book: ' + error.message);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadBooks();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     if (!token) {
         alert('You are not logged in');
-        window.location.href = '/login.html'; 
+        window.location.href = '/index.html'; 
         return;
     }
 

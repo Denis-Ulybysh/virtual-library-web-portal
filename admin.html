@@ -11,7 +11,7 @@
         html, body {
             height: 100%;
             margin: 0;
-            overflow: hidden;
+            overflow: auto;
         }
         body {
             font-family: Merriweather, "serif";
@@ -104,6 +104,13 @@
         <input type="text" id="isbn" placeholder="ISBN">
         <button onclick="addBook()" id="submit">Add Book</button>
     </div>
-    <script src="admin.js?v=3"></script>
+    <!-- Book Display and Management Section -->
+<div id="bookDisplay">
+    <h2>Manage Books</h2>
+    <div id="booksList">
+        <!-- Books will be dynamically loaded here -->
+    </div>
+</div>
+    <script src="admin.js?v=6"></script>
 </body>
 </html>
