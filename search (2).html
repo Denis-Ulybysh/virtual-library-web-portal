@@ -1,115 +1,106 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    <title>Search Books</title>
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-        body {
-            font-family: Merriweather, "serif";
-            background: rgb(4,32,43);
-            background: linear-gradient(0deg, rgba(4,32,43,1) 0%, rgba(22,54,68,1) 100%);
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-        }
-        h1, h2 {
-            color: white;
-        }
-        nav {
-            background-color: #96ABB6;
-            border: solid #576B75;
-            padding-left: 10px;
-            padding-top: 10px;
-            padding-bottom: 5px;
-            display: flex;
-            align-items: center;
-        }
-        button {
-            font-family: Merriweather, "serif";
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-            background-color: #4BE05E;
-            border: solid 2px #009817;
-            margin-top: 10px;
-            padding: 7px;
-        }
-        nav button {
-            margin-top: 0;
-            margin-left: 10px;
-        }
-        button:hover {
-            cursor: pointer;
-            background-color: #93FF92;
-        }
-        main {
-            flex: 1;
-            padding: 1rem;
-        }
-        .book-list {
-            display: flex;
-            flex-direction: column;
-        }
-        .book, .apiBook {
-            background-color: #96ABB6;
-            color: #031E29;
-            border: solid #576B75;
-            padding: 15px;
-            margin-bottom: 15px;
-            width: 80%;
-        }
-        input {
-            font-size: 20px;
-            font-family: Merriweather, "serif";
-            position: relative;
-            display: inline-block;
-            width: 800px;
-            border: solid 2px #576B75;
-            padding-top: 8px;
-            padding-bottom: 8px;
-        }
-
-        #bookList, #apiSearchResults {
-            margin-top: 20px;
-        }
-
-        .removeBtn {
-            color: red;
-            cursor: pointer;
-            float: right;
-        }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="home.html"> <img src="img/logo-256x256.png" width="64px" /> </a>
-        <a href="search.html"> <button>Search Books</button> </a>
-        <a href="admin.html"> <button id="adminButton" style="display: none;">Admin Panel</button> </a>
-    </nav>
-    <main>
-        <h1>Search Books</h1>
-        <input type="text" id="searchQuery">
-        <button onclick="searchBooks()">Search</button>
-        <div id="searchResultsContainer">
-            <h2>Library Results</h2>
-            <div id="searchResults">
-                <!-- Results will go here -->
-                
-                
+<html lang="en">
+    <head>
+        <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+        <title>Search Books</title>
+        <style>
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            body {
+                font-family: Merriweather, "serif";
+                background: rgb(4,32,43);
+                background: linear-gradient(0deg, rgba(4,32,43,1) 0%, rgba(22,54,68,1) 100%);
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+            }
+            nav {
+                background-color: #96ABB6;
+                border: solid #576B75;
+                padding-left: 10px;
+                padding-top: 10px;
+                padding-bottom: 5px;
+                display: flex;
+                align-items: center;
+            }
+            h1, h2 {
+                color: white;
+            }
+            button {
+                font-family: Merriweather, "serif";
+                font-size: 20px;
+                font-weight: bold;
+                color: white;
+                background-color: #4BE05E;
+                border: solid 2px #009817;
+                margin-top: 10px;
+                padding: 7px;
+            }
+            nav button {
+                margin-top: 0;
+                margin-left: 10px;
+            }
+            button:hover {
+                cursor: pointer;
+                background-color: #93FF92;
+            }
+            main {
+                flex: 1;
+                padding: 1rem;
+            }
+            .book-list {
+                display: flex;
+                flex-direction: column;
+            }
+            .book, .apiBook {
+                background-color: #96ABB6;
+                color: #031E29;
+                border: solid #576B75;
+                padding: 15px;
+                margin-bottom: 15px;
+                width: 80%;
+            }
+            input {
+                font-size: 20px;
+                font-family: Merriweather, "serif";
+                position: relative;
+                display: inline-block;
+                width: 800px;
+                border: solid 2px #576B75;
+                padding-top: 8px;
+                padding-bottom: 8px;
+            }
+            #bookList, #apiSearchResults {
+                margin-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <nav>
+            <a href="home.html"> <img src="img/logo-256x256.png" width="64px" /> </a>
+            <a href="search (2).html"> <button>Search Books</button> </a>
+            <a href="admin.html"> <button id="adminButton" style="display: none;">Admin Panel</button> </a>
+        </nav>
+        <main>
+            <h1>Search Books</h1>
+            <input type="text" id="searchQuery">
+            <button onclick="searchBooks()">Search</button>
+            <div id="searchResultsContainer">
+                <h2>Library Results</h2>
+                <div id="searchResults">
+                    <!-- Results will go here -->
+                </div>
+                <h2>Google Books Results</h2>
+                <div id="apiSearchResults">
+                    <!-- API results will go here -->
+                </div>
             </div>
-            <h2>Google Books Results</h2>
-            <div id="apiSearchResults">
-                <!-- API results will go here -->
-                
-                
-    </main>
-    <script src="search.js?v=21"></script>
-</body>
+        </main>
+        <script src="search.js?v=21"></script>
+    </body>
 </html>
