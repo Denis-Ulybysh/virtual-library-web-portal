@@ -145,3 +145,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
    
 });
+
+function checkAdminRole() {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    // Naive decoding; in production, use a library to parse JW
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.role === 'admin') {
+        document.getElementById('adminButton').style.display = 'block';
+        document.getElementById('adminButton').onclick = function() {
+            window.location.href = 'admin.html';
+        };
+    }
+}
