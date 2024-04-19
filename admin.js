@@ -125,6 +125,7 @@ function deleteBook(bookId) {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadBooks();
+    checkAdminRole();
 });
 
 document.addEventListener('DOMContentLoaded', () => {

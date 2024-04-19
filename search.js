@@ -145,7 +145,6 @@ function checkAdminRole() {
     }
 }
 
-
-
-
-
+document.addEventListener('DOMContentLoaded', () => {
+    checkAdminRole();
+});
